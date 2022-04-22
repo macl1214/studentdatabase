@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>Course Form - SB Admin</title>
+	
+	<th:block th:insert="files-fragments/links-scripts :: documents" />
+	<th:block th:insert="files-fragments/links-scripts :: top-scripts" />
+</head>
+
+<body class="sb-nav-fixed">
+	<nav th:replace="nav-fragments/navs :: topnav"></nav>
+	<div id="layoutSidenav">
+		<div th:replace="nav-fragments/navs :: sidenav"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<!-- Main Content -->
+				<div class="container-fluid px-4">
+					<h1 class="mt-4"> 
+						<th:block th:if="${courseDto.id == null}" th:text="New ">
+						</th:block>
+						<th:block th:unless="${courseDto.id == null}" th:text="Update ">
+						</th:block>
+						Course
+					</h1>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
+						<li class="breadcrumb-item"><a th:href="@{/course/list}">Course List</a></li>
+						<li class="breadcrumb-item active">
+							<th:block th:if="${courseDto.id == null}" th:text="New ">
+							</th:block>
+							<th:block th:unless="${courseDto.id == null}" th:text="Update ">
+							</th:block>
+							Course
+						</li>
+					</ol>
+					<form class="row g-3" th:action="@{/course/save}"
+						th:object="${courseDto}" method="POST">
+						<!-- Id -->
+						<div class="col-md-6" th:hidden="*{id == null}">
+							<label for="id" class="form-label">Id</label> 
+							<input type="text" class="form-control" id="id"
+								   th:field="*{id}" readonly>
+						</div>
+						<!-- Placeholder -->
+						<div class="col-md-6" th:hidden="*{id == null}">
+						</div>
+						<!-- Department Name -->
+						<div class="col-md-6">
+							<th:block th:if="*{department == null}">
+								<label for="departmentName" class="form-label">Department</label>
+								<select class="form-select" th:field="*{departmentName}" id="departmentName"
+									    th:disabled="*{departmentName}">
+									<option th:each="d : ${departments}" 
+											th:value="${d.name}" th:text="${d.name}"
+											th:selected="${#strings.equals(d.name, #strings.toString(departmentName))}">
+									</option>
+								</select>
+							</th:block>
+							<th:block th:unless="*{department == null}">
+								<label for="departmentName" class="form-label">Department</label>
+								<input type="text" class="form-control" id="departmentName"
+									   th:field="*{departmentName}" readonly>
+							</th:block>
+						</div>
+						<!-- Course Number -->
+						<div class="col-md-6">
+							<label for="courseNumber" class="form-label">Course Number</label> 
+							<input type="text" class="form-control" id="courseNumber"
+							       th:field="*{courseNumber}">
+						</div>			
+						<!-- Course Name -->
+						<div class="col-md-12">
+							<label for="courseName" class="form-label">Course Name</label> 
+							<input type="text" class="form-control" id="courseName" 
+							       th:field="*{courseName}">
+						</div>
+						<!-- Description -->
+						<div class="col-md-12">
+							<label for="description" class="form-label">Description</label> 
+							<textarea class="form-control" id="description"
+								      th:field="*{description}" rows=6></textarea>
+						</div>
+						<div class="col-12">
+							<button type="submit" class="btn btn-primary">Save</button>
+						</div>
+					</form>
+				</div>
+			</main>
+			<footer th:replace="nav-fragments/navs :: footer"> </footer>
+		</div>
+	</div>
+
+	<th:block th:insert="files-fragments/links-scripts :: bottom-scripts" />
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>Home - SB Admin</title>
+	
+	<th:block th:insert="files-fragments/links-scripts :: documents" />
+	<th:block th:insert="files-fragments/links-scripts :: top-scripts" />
+
+	<th:block sec:authorize="!isAuthenticated()"
+			  th:replace="dashboard-fragments/guest-dash :: guest-script">
+	</th:block>
+</head>
+
+<body class="sb-nav-fixed" th:classappend="${#authorization.expression('isAuthenticated()')} ? '' : 'sb-sidenav-toggled'">
+	<nav th:replace="nav-fragments/navs :: topnav"></nav>
+	<div id="layoutSidenav">
+		<div th:replace="nav-fragments/navs :: sidenav"></div>
+		<div id="layoutSidenav_content">
+			<main class="main mb-auto">
+				
+				<!-- Main Content -->
+				
+				<!-- If Not Logged In -->
+				<th:block sec:authorize="!isAuthenticated()"
+						  th:replace="dashboard-fragments/guest-dash :: guest"/>
+				
+				<!-- If ROLE_ADMIN -->
+				<th:block sec:authorize="hasRole('ROLE_ADMIN')"
+						  th:replace="dashboard-fragments/admin-dash :: admin"/>
+
+				<!-- If ROLE_TEACHER -->
+				<th:block sec:authorize="hasRole('ROLE_TEACHER')"
+						  th:replace="dashboard-fragments/teacher-dash :: teacher"/>
+
+				<!-- If ROLE_STUDENT -->
+				<th:block sec:authorize="hasRole('ROLE_STUDENT')"
+						  th:replace="dashboard-fragments/student-dash :: student"/>
+						  
+			</main>
+			<footer th:replace="nav-fragments/navs :: footer"> </footer>
+		</div>
+	</div>
+
+	<th:block th:insert="files-fragments/links-scripts :: bottom-scripts" />
+
+	<script sec:authorize="!isAuthenticated()"
+			th:replace="dashboard-fragments/guest-dash :: guest-script">
+	</script>
+	<script sec:authorize="hasRole('ROLE_ADMIN')"
+			th:replace="dashboard-fragments/admin-dash :: admin-script">
+	</script>
+	<script sec:authorize="hasRole('ROLE_TEACHER')"
+			th:replace="dashboard-fragments/teacher-dash :: teacher-script">
+	</script>
+	<script sec:authorize="hasRole('ROLE_STUDENT')"
+			th:replace="dashboard-fragments/student-dash :: student-script">
+	</script>
+	
+
+	
+</body>
+</html>

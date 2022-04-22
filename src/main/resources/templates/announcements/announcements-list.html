@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>Announcements - SB Admin</title>
+	
+	<th:block th:insert="files-fragments/links-scripts :: documents" />
+	<th:block th:insert="files-fragments/links-scripts :: top-scripts" />
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+		integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/datatables-plugins/1.11.4/sorting/datetime-moment.min.js"
+		integrity="sha512-cln13IRvnKJQmByR8cXOb9NMF0BzbIQbQb29vbX6mQYKsO1uyRYlGB2jWtGRgXaCq3JWqLqDZNOJ9kHzYH+dkQ=="
+		crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body class="sb-nav-fixed">
+	<nav th:replace="nav-fragments/navs :: topnav"></nav>
+	<div id="layoutSidenav">
+		<div th:replace="nav-fragments/navs :: sidenav"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<!-- Main Content -->
+				<div class="container-fluid px-4">
+					<h1 class="mt-4">Announcements</h1>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
+						<li class="breadcrumb-item active">Announcements</li>
+					</ol>
+					<th:block sec:authorize="hasRole('ROLE_ADMIN')">
+						<div class="d-grid gap-2">
+							<a class="btn btn-light btn-outline-secondary mb-2"
+								th:href="@{/announcements/addAnnouncement}">Add New Post</a>
+						</div>
+					</th:block>
+					<div class="card mb-4">
+						<div class="card-header">
+							<i class="fas fa-table me-1"></i> Announcements
+						</div>
+						<div class="card-body">
+							<table id="datatablesSimple" class="hover order-column" style="width:100%">
+								<thead>
+									<tr>
+										<th>Title</th>
+										<th>Author</th>
+										<th>Date</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<th>Title</th>
+										<th>Author</th>
+										<th>Date</th>
+									</tr>
+								</tfoot>
+								<tbody>
+									<tr th:each="announcement : ${announcements}">
+										<!-- Message -->
+										<td>
+											<a th:href="@{/announcements/details(announcementId=${announcement.id})}"
+											   class="text-decoration-none">
+												<span th:text="${announcement.title}"></span>
+											</a>
+										</td>
+										<!-- Author -->
+										<td th:text="${announcement.user.firstName + ' ' + announcement.user.lastName}"></td>
+										<!-- Date -->
+										<td th:text=${announcement.formattedTimestamp}></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer th:replace="nav-fragments/navs :: footer"> </footer>
+		</div>
+	</div>
+
+	<th:block th:insert="files-fragments/links-scripts :: bottom-scripts" />
+	<script th:inline="javascript">
+		
+		$(document).ready(function() {
+			$.fn.dataTable.moment( 'MM/DD/YYYY hh:mm:ss a' );
+
+			$('#datatablesSimple').DataTable({
+				order : [ 2, 'desc' ],
+				columnDefs: [
+					{ "width" : "60%", "targets" : 0},
+					{ "width" : "15%", "targets" : [1,2]}
+				]
+			});
+		});
+	</script>
+</body>
+</html>

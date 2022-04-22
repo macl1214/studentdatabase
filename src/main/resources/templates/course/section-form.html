@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title>Section Form - SB Admin</title>
+	
+	<th:block th:insert="files-fragments/links-scripts :: documents" />
+	<th:block th:insert="files-fragments/links-scripts :: top-scripts" />
+</head>
+
+<body class="sb-nav-fixed">
+	<nav th:replace="nav-fragments/navs :: topnav"></nav>
+	<div id="layoutSidenav">
+		<div th:replace="nav-fragments/navs :: sidenav"></div>
+		<div id="layoutSidenav_content">
+			<main class="mb-3">
+				<!-- Main Content -->
+				<div class="container-fluid px-4">
+					<h2 class="mt-4" th:text="${course.department.name + ' ' + course.courseNumber + ': ' + course.courseName}"></h2>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
+						<li class="breadcrumb-item"><a th:href="@{/course/list}">Course List</a></li>
+						<li class="breadcrumb-item"><a th:href="@{/course/description(courseId=${course.id})}">Course Description</a></li>
+						<li class="breadcrumb-item active">
+							<th:block th:if="${section.id == null}" th:text="New ">
+							</th:block>
+							<th:block th:unless="${section.id == null}" th:text="Update ">
+							</th:block>
+							Section
+						</li>
+					</ol>
+					<div class="card mb-4">
+						<div class="card-body">
+							<h4 class="mb-3">Description</h4>
+							<p th:text="${course.description}">
+						</div>
+					</div>
+					<hr>
+					<h3 class="mt-4"> 
+						<th:block th:if="${section.id == null}" th:text="New ">
+						</th:block>
+						<th:block th:unless="${section.id == null}" th:text="Update ">
+						</th:block>
+						Section
+					</h3>
+					<form class="row g-3" th:action="@{/course/saveSection}"
+						th:object="${section}" method="POST">
+						<!-- Id -->
+						<div class="col-md-6" th:hidden="*{id == null}">
+							<label for="id" class="form-label">Id</label> 
+							<input type="text" class="form-control" id="id"
+								   th:field="*{id}" readonly>
+						</div>
+						<!-- Placeholder-->
+						<div class="col-md-6" th:hidden="*{id == null}">
+						</div>
+						<!-- Start Date -->
+						<div class="col-md-6">
+							<label for="startDate" class="form-label">Start Date</label> 
+							<input type="date" class="form-control" id="startDate"
+							       th:field="*{startDate}">
+						</div>
+						<!-- End Date -->
+						<div class="col-md-6">
+							<label for="endDate" class="form-label">End Date</label> 
+							<input type="date" class="form-control" id="endDate"
+							       th:field="*{endDate}">
+						</div>
+						<!-- Start Time -->
+						<div class="col-md-6">
+							<label for="startTime" class="form-label">Start Time</label> 
+							<input type="time" class="form-control" id="startTime"
+							       th:field="*{startTime}">
+						</div>
+						<!-- End Date -->
+						<div class="col-md-6">
+							<label for="endTime" class="form-label">End Time</label> 
+							<input type="time" class="form-control" id="endTime"
+							       th:field="*{endTime}">
+						</div>
+						<!-- Meeting Days -->
+						<div>
+							<p>Meeting Days</p>
+							<div class="form-check form-check-inline">
+								<label class="form-check-label" for="sunday">Sunday</label>
+								<input type="checkbox" class="form-check-input" 
+									   id="sunday" th:field="${section.sunday}">
+							</div>
+							<div class="form-check form-check-inline">
+								<label class="form-check-label" for="monday">Monday</label>
+								<input type="checkbox" class="form-check-input"
+									   id="monday" th:field="${section.monday}"> 
+							</div>
+							<div class="form-check form-check-inline">
+								<label class="form-check-label" for="tuesday">Tuesday</label>
+								<input type="checkbox" class="form-check-input" 
+									   id="tuesday" th:field="${section.tuesday}">
+							</div>
+							<div class="form-check form-check-inline">
+								<label class="form-check-label" for="wednesday">Wednesday</label>
+								<input type="checkbox" class="form-check-input" 
+									   id="wednesday" th:field="${section.wednesday}">
+							</div>
+							<div class="form-check form-check-inline">
+								<label class="form-check-label" for="thursday">Thursday</label>
+								<input type="checkbox" class="form-check-input" 
+									   id="thursday" th:field="${section.thursday}">
+							</div>
+							<div class="form-check form-check-inline">
+								<label class="form-check-label" for="friday">Friday</label>
+								<input type="checkbox" class="form-check-input" 
+									   id="friday" th:field="${section.friday}">
+							</div>
+							<div class="form-check form-check-inline">
+								<label class="form-check-label" for="saturday">Saturday</label>
+								<input type="checkbox" class="form-check-input" 
+									   id="saturday" th:field="${section.saturday}">
+							</div>
+						</div>
+						<!-- Class Size -->
+						<div class="col-md-6">
+							<label for="size" class="form-label">Class Size</label> 
+							<input type="text" class="form-control" id="size"
+							       th:field="*{size}">
+						</div>
+						<!-- Instructor-->
+						<div class="col-md-6">
+							<label for="instructor" class="form-label">Instructor</label> 
+							<select class="form-select" th:field=*{instructor.id} id="instructor">
+								<option th:each="i : ${instructors}"
+										th:value="${i.id}" th:text="${i.firstName + ' ' + i.lastName}">
+							</select>
+						</div>
+						<!-- Course Information: Hidden -->
+						<div>
+							<select class="form-select" th:field=*{course.id} id="course" hidden="true">
+								<option th:value="${course.id}" th:text="${course.id}">
+							</select>
+						</div>
+						<div class="col-md-6">
+							<button class="btn btn-success">Submit</button>
+						</div>
+					</form>
+				</div>
+			</main>
+			<footer th:replace="nav-fragments/navs :: footer"> </footer>
+		</div>
+	</div>
+
+	<th:block th:insert="files-fragments/links-scripts :: bottom-scripts" />
+</body>
+</html>

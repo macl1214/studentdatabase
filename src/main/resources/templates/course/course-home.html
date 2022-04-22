@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<title th:text="${course.department.name + ' ' + course.courseNumber + ': ' + course.courseName}"></title>
+	
+	<th:block th:insert="files-fragments/links-scripts :: documents" />
+	<th:block th:insert="files-fragments/links-scripts :: top-scripts" />
+</head>
+
+<body class="sb-nav-fixed">
+	<nav th:replace="nav-fragments/navs :: topnav"></nav>
+	<div id="layoutSidenav">
+		<div th:replace="nav-fragments/navs :: sidenav"></div>
+		<div id="layoutSidenav_content">
+			<main>
+				<!-- Main Content -->
+				<div class="container-fluid px-4">
+					<h2 class="mt-4" th:text="${course.department.name + ' ' + course.courseNumber + ': ' + course.courseName}"></h2>
+					<ol class="breadcrumb mb-4">
+						<li class="breadcrumb-item"><a th:href="@{/}">Dashboard</a></li>
+						<li class="breadcrumb-item"><a th:href="@{/course/list}">Course List</a></li>
+						<li class="breadcrumb-item active">Course Description</li>
+					</ol>
+					<div class="card mb-4">
+						<div class="card-body">
+							<h4 class="mb-3">Description</h4>
+							<p th:text="${course.description}">
+						</div>
+					</div>
+					<hr>
+					<th:block sec:authorize="hasRole('ROLE_ADMIN')">
+						<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+							<a class="btn btn-primary mx-md-2 my-md-2" th:href="@{/course/addSection(courseId=${course.id})}">Add Section</a>
+						</div>
+					</th:block>
+					<div class="card mb-4">
+						<div class="card-body">
+							<table id="datatablesSimple" class="hover order-column">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Course Name</th>
+										<th>Course Number</th>
+										<th>Section Number</th>
+										<th>Start Date</th>
+										<th>End Date</th>
+										<th>Start Time</th>
+										<th>End Time</th>
+										<th>Meeting Days</th>
+										<th>Class Size</th>
+									</tr>
+								</thead>
+								<tfoot>
+									<tr>
+										<th>ID</th>
+										<th>Course Name</th>
+										<th>Course Number</th>
+										<th>Section Number</th>
+										<th>Start Date</th>
+										<th>End Date</th>
+										<th>Start Time</th>
+										<th>End Time</th>
+										<th>Meeting Days</th>
+										<th>Class Size</th>
+									</tr>
+								</tfoot>
+								<tbody>
+									<tr th:each="section : ${sections}">
+										<td th:text="${section.id}"></td>
+										<td th:text="${course.courseName}"></td>
+										<td th:text="${course.courseNumber}"></td>
+										<td th:text="${#numbers.formatInteger(section.sectionId,3)}"></td>
+										<td th:text="${section.formattedStartDate}"></td>
+										<td th:text="${section.formattedEndDate}"></td>
+										<td th:text="${section.formattedStartTime}"></td>
+										<td th:text="${section.formattedEndTime}"></td>
+										<td th:text="${section.meetingDaysString}"></td>
+										<td th:text="${section.size}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer th:replace="nav-fragments/navs :: footer"> </footer>
+		</div>
+	</div>
+
+	<th:block th:insert="files-fragments/links-scripts :: bottom-scripts" />
+	
+	<script>
+		$(document).ready(function() {
+			$('#datatablesSimple').DataTable({
+				"columns": [
+				    { "width": "10%" },
+				    { "width": "10%" },
+				    { "width": "10%" },
+				    { "width": "10%" },
+				    { "width": "10%" },
+				    { "width": "10%" },
+				    { "width": "10%" },
+				    { "width": "10%" },
+				    { "width": "10%" },
+				    { "width": "10%" },
+				  ]
+			})
+		})
+	</script>
+</body>
+</html>
